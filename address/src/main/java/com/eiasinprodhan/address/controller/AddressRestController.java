@@ -47,4 +47,10 @@ public class AddressRestController {
         AddressResponse addressResponse = addressService.deleteAddress(id);
         return new ResponseEntity<>(addressResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<List<AddressResponse>> getAddressByEmployeeId(@PathVariable Long id) {
+        List<AddressResponse> addressResponseList = addressService.getAddressByEmployeeId(id);
+        return new ResponseEntity<>(addressResponseList, HttpStatus.OK);
+    }
 }

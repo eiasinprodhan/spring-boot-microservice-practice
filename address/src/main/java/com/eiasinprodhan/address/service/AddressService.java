@@ -17,4 +17,6 @@ public interface AddressService {
 
     public AddressResponse deleteAddress(Long addressId);
 
+    public List<AddressResponse> getAddressByEmployeeId(Long employeeId);
+
 }

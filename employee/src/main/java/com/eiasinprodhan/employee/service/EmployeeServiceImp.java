@@ -1,6 +1,8 @@
 package com.eiasinprodhan.employee.service;
 
+import com.eiasinprodhan.employee.client.AddressClient;
 import com.eiasinprodhan.employee.dto.request.EmployeeRequest;
+import com.eiasinprodhan.employee.dto.response.AddressResponse;
 import com.eiasinprodhan.employee.dto.response.EmployeeResponse;
 import com.eiasinprodhan.employee.entity.Employee;
 import com.eiasinprodhan.employee.exception.BadRequestException;
@@ -17,6 +19,7 @@ import java.util.List;
 public class EmployeeServiceImp implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final AddressClient addressClient;
     private final ModelMapper modelMapper;
 
     @Override
@@ -43,14 +46,22 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public EmployeeResponse getEmployee(Long employeeId) {
+
         if (employeeId == null) {
             throw new BadRequestException("Employee Id is Not Found.");
         }
 
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found."));
 
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->new ResourceNotFoundException("Employee Not Found."));
+        List<AddressResponse> addressResponseList =
+                addressClient.getAddressByEmployeeId(employeeId);
 
-        EmployeeResponse employeeResponse = modelMapper.map(employee, EmployeeResponse.class);
+        EmployeeResponse employeeResponse =
+                modelMapper.map(employee, EmployeeResponse.class);
+
+        employeeResponse.setAddressResponseList(addressResponseList);
+
         return employeeResponse;
     }
 

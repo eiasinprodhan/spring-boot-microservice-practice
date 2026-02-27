@@ -111,4 +111,17 @@ public class AddressServiceImp implements AddressService {
 
         return addressResponse;
     }
+
+    @Override
+    public List<AddressResponse> getAddressByEmployeeId(Long employeeId) {
+        if (employeeId == null) {
+            throw new BadRequestException("EmployeeId is Null");
+        }
+
+        List<Address> addressList = addressRepository.getAddressByEmployeeId(employeeId);
+
+        List<AddressResponse> addressResponseList = addressList.stream().map(address -> modelMapper.map(address, AddressResponse.class)).toList();
+
+        return addressResponseList;
+    }
 }
