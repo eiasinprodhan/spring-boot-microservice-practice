@@ -46,22 +46,17 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public EmployeeResponse getEmployee(Long employeeId) {
-
         if (employeeId == null) {
             throw new BadRequestException("Employee Id is Not Found.");
         }
 
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found."));
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->new ResourceNotFoundException("Employee Not Found."));
 
-        List<AddressResponse> addressResponseList =
-                addressClient.getAddressByEmployeeId(employeeId);
+        List<AddressResponse> addressResponseList = addressClient.getAddressByEmployeeId(employeeId);
 
-        EmployeeResponse employeeResponse =
-                modelMapper.map(employee, EmployeeResponse.class);
+        EmployeeResponse employeeResponse = modelMapper.map(employee, EmployeeResponse.class);
 
         employeeResponse.setAddressResponseList(addressResponseList);
-
         return employeeResponse;
     }
 
